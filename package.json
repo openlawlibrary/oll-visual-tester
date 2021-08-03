@@ -1,0 +1,46 @@
+{
+  "name": "oll-visual-tester",
+  "version": "1.0.0",
+  "description": "Open Law Library visual testing framework",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vlasterx/visual-tester.git"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fancy-log": "^1.3.3",
+    "fs-extra": "^10.0.0",
+    "img-diff-js": "^0.5.2",
+    "join-images": "^0.2.8",
+    "playwright": "^1.13.1",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">= 14.15.0",
+    "npm": ">= 6.14.8"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "html",
+    "javascript",
+    "test"
+  ],
+  "author": "Vladimir Jovanović <vjovanovic@openlawlib.org>",
+  "license": "gpl-3.0",
+  "bugs": {
+    "url": "https://github.com/Vlasterx/visual-tester/issues"
+  },
+  "homepage": "https://github.com/Vlasterx/visual-tester/"
+}
