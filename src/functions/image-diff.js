@@ -67,6 +67,60 @@ const getImageNames = (dir, extension = null) => {
 }
 
 /**
+ * Generates batch config based on available CPU cores and free RAM
+ *
+ * @param {Object} options - Configuration object for this function
+ * @param {Array} options.config - Configuration array of tasks
+ * @param {Number} [options.megabytesPerTask] - Megabytes per task, influences how many tasks can be performed at the same time
+ * @param {Number} [options.safeCpuThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Boolean} [options.debug] - Show or hide debug messages
+ * @returns {Array} Returns batches of arrays
+ */
+const generateBatchConfig = (options) => {
+  const OPTIONS = {
+    config: [], // Array of configs
+    megabytesPerTask: 250, // Max MB per task
+    safeCpuThreads: 4, // Reserved for PC operations, these will not be used
+    debug: false,
+    ...options
+  }
+
+  const useThreads = os.cpus().length - OPTIONS.safeCpuThreads
+  const safeCpuThreads = useThreads <= 1 ? 1 : useThreads // Minimum one core is reserved for low end PC's
+  const RAMFree = Math.round(os.freemem() / Math.pow(1024, 2)) // in MB
+  const safeRAMThreads = Math.floor(RAMFree / OPTIONS.megabytesPerTask) > 4
+    ? Math.floor(RAMFree / OPTIONS.megabytesPerTask) - 4
+    : 1 // Minimum of one task is reserved for low end PC's
+  const totalConfigs = OPTIONS.config.length
+  const safeThreads = Math.min(safeCpuThreads, safeRAMThreads) // We take minimum
+  const totalBatches = Math.ceil(totalConfigs / safeThreads)
+  const batches = []
+
+  // Create batches
+  log(`Using up to ${safeCpuThreads} CPU Threads and up to ${RAMFree} MB of RAM`, OPTIONS.debug)
+  log(`Total of ${totalConfigs} configurations are split into ${totalBatches} batches`, OPTIONS.debug)
+
+  // Start filling batch
+  let remainingConfigs = totalConfigs
+
+  for (let i = 0; i < totalBatches; i++) {
+    batches[i] = []
+
+    for (let b = 0; b < safeThreads; b++) {
+      const itemIndex = (i * safeThreads) + b
+
+      if (remainingConfigs > 0) {
+        batches[i][b] = OPTIONS.config[itemIndex]
+      }
+
+      remainingConfigs--
+    }
+  }
+
+  return batches
+}
+
+/**
  * Generates screenshots in serial or parallel mode.
  * Serial mode is recommended for low-end machines
  * Parallel mode is recommended for high end machines
@@ -74,16 +128,20 @@ const getImageNames = (dir, extension = null) => {
  * @param {Object} options - Configuration object
  * @param {Array} options.imagesConfig - Array of image configurations
  * @param {Boolean} [options.serial] - Generator mode `serial` = true, `parallel` = false. If not set, it will be automatically detected based on PC specs
- * @param {Boolean} [options.debug] - Show or hide debug messages, overrides individual settings from `imagesConfig`
  * @param {Boolean} [options.path] - If set overrides individual paths from `imagesConfig`
+ * @param {Number} [options.megabytesPerTask] - Megabytes per task, influences how many tasks can be performed at the same time
+ * @param {Number} [options.safeCpuThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Boolean} [options.debug] - Show or hide debug messages, overrides individual settings from `imagesConfig`
  * @returns {Promise} Returns array of results
  */
 const generateImages = (options) => {
   const OPTIONS = {
     imagesConfig: null,
     serial: null,
-    debug: null,
     path: null,
+    megabytesPerTask: 250, // Max MB per task
+    safeCpuThreads: 4, // Reserved for PC operations, these will not be used
+    debug: null,
     ...options
   }
 
@@ -91,10 +149,10 @@ const generateImages = (options) => {
   // ---------------------------------------------------------------------------
   // Generate screenshots in series
   const generateInSeries = async () => {
+    log('Started to generate screenshots in SERIAL mode', OPTIONS.debug)
+
     const results = []
     const errors = []
-
-    log('Started to generate screenshots in serial mode', OPTIONS.debug)
 
     for (let i = 0; i < OPTIONS.imagesConfig.length; i++) {
       await screenshot(OPTIONS.imagesConfig[i])
@@ -108,22 +166,32 @@ const generateImages = (options) => {
   }
 
   // Generate screenshots in parallel
-  const generateInParallel = () => {
-    const configs = []
+  const generateInParallel = async () => {
+    log('Started to generate screenshots in PARALLEL mode', OPTIONS.debug)
 
-    log('Started to generate screenshots in parallel mode', OPTIONS.debug)
+    const configBatches = generateBatchConfig({
+      config: OPTIONS.imagesConfig,
+      debug: OPTIONS.debug,
+      megabytesPerTask: OPTIONS.megabytesPerTask, // Max MB per task
+      safeCpuThreads: OPTIONS.safeCpuThreads, // Reserved for PC operations, these will not be used
+    })
 
-    for (let i = 0; i < OPTIONS.imagesConfig.length; i++) {
-      configs.push(
-        screenshot(OPTIONS.imagesConfig[i])
-      )
+    const results = []
+
+    for (let i = 0; i < configBatches.length; i++) {
+      log(`> Starting batch ${i + 1} / ${configBatches.length}`, OPTIONS.debug)
+      const batchOperations = []
+
+      configBatches[i].forEach(task => {
+        batchOperations.push(screenshot(task))
+      })
+
+      await Promise.all(batchOperations)
+        .then(result => results.push(result))
+        .catch(error => console.error(error))
     }
 
-    return new Promise((resolve, reject) => {
-      Promise.all(configs)
-        .then(values => { resolve(values) })
-        .catch(error => { reject(error) })
-    })
+    return results.flat(Infinity)
   }
 
   // Main function
@@ -163,7 +231,7 @@ const generateImages = (options) => {
     let capability = 'low' // Default state is low
 
     log(
-      `PC specs: ${cpuCores} CPU cores / ${cpuSpeed} GHz / ${freeRam} MB RAM free`,
+      `PC specs: ${cpuCores} CPU threads / ${cpuSpeed} GHz / ${freeRam} MB RAM free`,
       OPTIONS.debug
     )
 
