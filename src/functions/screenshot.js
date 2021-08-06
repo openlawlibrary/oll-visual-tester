@@ -89,6 +89,7 @@ const screenshot = async (options) => {
   const MESSAGE = {
     start: `Generating screenshot ${chalk.magenta(OPTIONS.name)} in ${chalk.green(OPTIONS.engine)} browser`,
     created: `Saved to: ${chalk.blue(path.normalize(OPTIONS.path + path.sep + OPTIONS.name))}`,
+    createdClean: `Saved to: ${path.normalize(OPTIONS.path + path.sep + OPTIONS.name)}`,
     click (element) {
       return `${element.button || 'left'} click on ` +
         chalk.cyan(element.selector) +
@@ -164,7 +165,7 @@ const screenshot = async (options) => {
             log(MESSAGE.created, OPTIONS.debug)
 
             resolve({
-              msg: MESSAGE.created,
+              msg: MESSAGE.createdClean,
               name: OPTIONS.name,
               path: OPTIONS.path,
               el: OPTIONS.el,
@@ -172,7 +173,7 @@ const screenshot = async (options) => {
             })
           } else {
             resolve({
-              msg: MESSAGE.created,
+              msg: MESSAGE.createdClean,
               name: OPTIONS.name,
               path: OPTIONS.path,
               el: OPTIONS.el,
@@ -200,7 +201,7 @@ const screenshot = async (options) => {
                 log(MESSAGE.created, OPTIONS.debug)
 
                 resolve({
-                  msg: MESSAGE.created,
+                  msg: MESSAGE.createdClean,
                   name: OPTIONS.name,
                   path: OPTIONS.path,
                   el: OPTIONS.el,
@@ -208,7 +209,7 @@ const screenshot = async (options) => {
                 })
               } else {
                 resolve({
-                  msg: MESSAGE.created,
+                  msg: MESSAGE.createdClean,
                   name: OPTIONS.name,
                   path: OPTIONS.path,
                   el: OPTIONS.el,
