@@ -114,12 +114,15 @@ const screenshot = async (options) => {
   })
 
   await page.goto(OPTIONS.goto, { waitUntil: 'networkidle' })
+  await page.waitForLoadState('networkidle')
 
   // Perform clicks
   if (OPTIONS.clicks.length > 0) {
     let currentClick = 0
 
     const pageClicks = async () => {
+      await page.waitForLoadState('networkidle')
+      await page.waitForSelector(OPTIONS.clicks[currentClick].selector)
       log(MESSAGE.click(OPTIONS.clicks[currentClick]), OPTIONS.debug)
 
       await page.click(
@@ -131,6 +134,7 @@ const screenshot = async (options) => {
         'waitAfter' in OPTIONS.clicks[currentClick] &&
         OPTIONS.clicks[currentClick].waitAfter > 0
       ) {
+        await page.waitForLoadState('networkidle')
         await page.waitForTimeout(OPTIONS.clicks[currentClick].waitAfter)
       }
 
@@ -181,7 +185,10 @@ const screenshot = async (options) => {
             })
           }
         })
-        .catch(error => reject(error))
+        .catch(error => {
+          browser.close()
+          reject(error)
+        })
     } else {
       // Create element screenshot
       page.waitForSelector(OPTIONS.el)
@@ -217,7 +224,10 @@ const screenshot = async (options) => {
                 })
               }
             })
-            .catch(error => { reject(error) })
+            .catch(error => {
+              browser.close()
+              reject(error)
+            })
         })
         .catch(error => { reject(error) })
     }
