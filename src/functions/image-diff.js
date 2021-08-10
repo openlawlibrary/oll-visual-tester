@@ -72,7 +72,8 @@ const getImageNames = (dir, extension = null) => {
  * @param {Object} options - Configuration object for this function
  * @param {Array} options.config - Configuration array of tasks
  * @param {Number} [options.megabytesPerTask] - Megabytes per task, influences how many tasks can be performed at the same time
- * @param {Number} [options.safeCpuThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Number} [options.reservedThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Number} [options.threads] - Override CPU threads number
  * @param {Boolean} [options.debug] - Show or hide debug messages
  * @returns {Array} Returns batches of arrays
  */
@@ -80,25 +81,26 @@ const generateBatchConfig = (options) => {
   const OPTIONS = {
     config: [], // Array of configs
     megabytesPerTask: 250, // Max MB per task
-    safeCpuThreads: 4, // Reserved for PC operations, these will not be used
+    reservedThreads: 4, // Reserved for PC operations, these will not be used
+    threads: null, // Override number for CPU threads
     debug: false,
     ...options
   }
 
-  const useThreads = os.cpus().length - OPTIONS.safeCpuThreads
-  const safeCpuThreads = useThreads <= 1 ? 1 : useThreads // Minimum one core is reserved for low end PC's
+  const useThreads = isFalsy(OPTIONS.threads)
+    ? os.cpus().length - OPTIONS.reservedThreads
+    : Number(OPTIONS.threads)
+  const reservedThreads = useThreads <= 1 ? 1 : useThreads // Minimum one core is reserved for low end PC's
   const RAMFree = Math.round(os.freemem() / Math.pow(1024, 2)) // in MB
   const safeRAMThreads = Math.floor(RAMFree / OPTIONS.megabytesPerTask) > 4
     ? Math.floor(RAMFree / OPTIONS.megabytesPerTask) - 4
     : 1 // Minimum of one task is reserved for low end PC's
   const totalConfigs = OPTIONS.config.length
-  const safeThreads = Math.min(safeCpuThreads, safeRAMThreads) // We take minimum
+  const safeThreads = Math.min(reservedThreads, safeRAMThreads) // We take minimum
   const totalBatches = Math.ceil(totalConfigs / safeThreads)
-  const batches = []
 
   // Create batches
-  log(`Using up to ${safeCpuThreads} CPU Threads and up to ${RAMFree} MB of RAM`, OPTIONS.debug)
-  log(`Total of ${totalConfigs} configurations are split into ${totalBatches} batches`, OPTIONS.debug)
+  const batches = []
 
   // Start filling batch
   let remainingConfigs = totalConfigs
@@ -117,6 +119,9 @@ const generateBatchConfig = (options) => {
     }
   }
 
+  log(`Using up to ${useThreads} threads and up to ${safeThreads * OPTIONS.megabytesPerTask} MB of RAM`, OPTIONS.debug)
+  log(`Total of ${totalConfigs} configurations are split into ${totalBatches} batches`, OPTIONS.debug)
+
   return batches
 }
 
@@ -130,7 +135,8 @@ const generateBatchConfig = (options) => {
  * @param {Boolean} [options.serial] - Generator mode `serial` = true, `parallel` = false. If not set, it will be automatically detected based on PC specs
  * @param {Boolean} [options.path] - If set overrides individual paths from `imagesConfig`
  * @param {Number} [options.megabytesPerTask] - Megabytes per task, influences how many tasks can be performed at the same time
- * @param {Number} [options.safeCpuThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Number} [options.reservedThreads] - Number of CPU threads reserved for other OS tasks. This is just an approximate number
+ * @param {Number} [options.threads] - Override CPU threads number
  * @param {Boolean} [options.debug] - Show or hide debug messages, overrides individual settings from `imagesConfig`
  * @returns {Promise} Returns array of results
  */
@@ -140,7 +146,8 @@ const generateImages = (options) => {
     serial: null,
     path: null,
     megabytesPerTask: 250, // Max MB per task
-    safeCpuThreads: 4, // Reserved for PC operations, these will not be used
+    reservedThreads: 4, // Reserved for PC operations, these will not be used
+    threads: null, // Override number for CPU threads
     debug: null,
     ...options
   }
@@ -173,7 +180,8 @@ const generateImages = (options) => {
       config: OPTIONS.imagesConfig,
       debug: OPTIONS.debug,
       megabytesPerTask: OPTIONS.megabytesPerTask, // Max MB per task
-      safeCpuThreads: OPTIONS.safeCpuThreads, // Reserved for PC operations, these will not be used
+      reservedThreads: OPTIONS.reservedThreads, // Reserved for PC operations, these will not be used
+      threads: OPTIONS.threads,
     })
 
     const results = []
