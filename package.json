@@ -4,7 +4,7 @@
   "description": "Open Law Library visual testing framework",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vlasterx/visual-tester.git"
+    "url": "git+https://github.com/openlawlibrary/oll-visual-tester.git"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -13,7 +13,7 @@
     "img-diff-js": "^0.5.2",
     "join-images": "^0.2.8",
     "playwright": "^1.13.1",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
@@ -40,7 +40,7 @@
   "author": "Vladimir Jovanović <vjovanovic@openlawlib.org>",
   "license": "gpl-3.0",
   "bugs": {
-    "url": "https://github.com/Vlasterx/visual-tester/issues"
+    "url": "https://github.com/openlawlibrary/oll-visual-tester/issues"
   },
-  "homepage": "https://github.com/Vlasterx/visual-tester/"
+  "homepage": "https://github.com/openlawlibrary/oll-visual-tester/"
 }
