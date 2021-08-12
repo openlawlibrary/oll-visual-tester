@@ -131,7 +131,7 @@ compareImages({
   .catch((error) => { console.error(error) })
 ```
 
-As a result, we will an object with 4 arrays:
+As a result, we will an get an object with 4 arrays:
 - `passed` - Images that passed the test
 - `failed` - Images that failed the test
 - `missing` - Images that are missing in baseline directory, but are present in new.
