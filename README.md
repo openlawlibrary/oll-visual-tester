@@ -175,6 +175,3 @@ createDiffResult Diff image temp\diff\screenshot2.temp.png has been created
 Diff image may look like this:
 
 ![Diff](./static/diff-screenshot.png)
-
-## Author
-Vladimir Jovanović (vjovanovic@openlawlib.org)
