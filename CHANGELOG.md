@@ -11,13 +11,21 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 ### Added
 
 ### Fixed
-- Fix waiting for document and elements ([#2])
 
 ### Changed
 
 ### Removed
 
 ### Deprecated
+
+
+## [v1.1.2] (released: 2021-10-20)
+
+### Fixed
+- Updated NPM ([#3])
+
+
+[#3]: https://github.com/openlawlibrary/oll-visual-tester/pull/3
 
 
 ## [v1.1.1] (released: 2021-08-10)
