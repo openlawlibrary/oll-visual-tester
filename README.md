@@ -1,20 +1,12 @@
-# OLL Visual testing framework
+# OLL Visual Tester
+Create page screenshots and then easily compare them.
 
-This plugin is intended for the creation of screenshots and their comparison.
-
-## Usage
-Until this NPM package is published for the public, we can use it by including
-it into `package.json` file directly.
-
-```json
-{
-  "devDependencies": {
-    "oll-visual-tester": "https://github.com/openlawlibrary/oll-visual-tester.git"
-  }
-}
+## Installation
+```bash
+npm install --save oll-visual-tester
 ```
 
-Afterwards we can use it in out JS files like this:
+Afterwards you can import it like this:
 
 ```js
 const { screenshot, generateImages, compareImages } = require('oll-visual-tester')
@@ -101,7 +93,7 @@ const configurationArray = [
     name: 'screenshot2.jpg',
     fullPage: true,
     clicks: [],
-    el: null, // Element selector we want to make screenshot of
+    el: null,
     debug: true,
   },
 ]
@@ -113,7 +105,7 @@ generateImages(configurationArray)
 
 ### Compare images tool
 This tool is used to compare images from two directories. When run, it will
-find the files with the same name and will compare those files.
+find the files **with the same name** and will compare those files.
 
 For files where there is a difference, a new PNG image will be created. It will
 contain a baseline image, diff image and a new image, positioned side by side.
@@ -138,7 +130,7 @@ As a result, we will an get an object with 4 arrays:
 - `outdated` - Images that are missing in new directory, but are present in baseline.
 
 ```bash
-[18:46:09] Started to compare 2 screenshots
+[16:18:03] Started to compare 2 screenshots
 createDiffResult Diff image temp\diff\screenshot2.temp.png has been created
 {
   passed: [
@@ -175,3 +167,6 @@ createDiffResult Diff image temp\diff\screenshot2.temp.png has been created
 Diff image may look like this:
 
 ![Diff](./static/diff-screenshot.png)
+
+## Maintainer
+[Vladimir Jovanović](https://github.com/Vlasterx)

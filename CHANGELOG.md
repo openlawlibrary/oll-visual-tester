@@ -19,6 +19,15 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 ### Deprecated
 
 
+## [v1.1.3] (released: 2021-10-22)
+
+### Changed
+- Publish NPM package ([#4])
+
+
+[#3]: https://github.com/openlawlibrary/oll-visual-tester/pull/4
+
+
 ## [v1.1.2] (released: 2021-10-20)
 
 ### Fixed
@@ -52,7 +61,9 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 - Initial version.
 
 
-[Unreleased]: https://github.com/openlawlibrary/platform/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/openlawlibrary/platform/compare/v1.1.3...HEAD
+[v1.1.3]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.2...v1.1.3
+[v1.1.2]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/openlawlibrary/oll-visual-tester/compare/dc04238...v1.0.0
