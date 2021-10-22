@@ -1,3 +1,4 @@
+const msg = require('fancy-log')
 const { generateImages, compareImages } = require('../src/index')
 
 const config = [
@@ -76,16 +77,17 @@ const config = [
 ]
 
 // First step is to generate images from a config
-console.log('starting to generate images')
+msg('Starting to generate images')
+msg('One diff should pass, one should fail')
 
 generateImages({
   imagesConfig: config,
 })
   .then((results) => {
-    console.log(results)
+    msg(results)
 
     // Second step is to compare images from two directories
-    console.log('Starting to compare images')
+    msg('Starting to compare images')
 
     compareImages({
       dirBaseline: './temp/baseline/',
@@ -93,7 +95,14 @@ generateImages({
       dirDiff: './temp/diff/',
       debug: true
     })
-      .then((result) => { console.log(result) })
+      .then((result) => {
+        msg('Result:')
+        console.log(result)
+
+        if (result.passed.length === 1 && result.failed.length === 1) {
+          msg('*** TEST PASSED ***')
+        }
+      })
       .catch((error) => { console.error(error) })
   })
   .catch((error) => { console.error(error) })
