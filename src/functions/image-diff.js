@@ -7,6 +7,22 @@ const { screenshot } = require('./screenshot')
 const { log, isFalsy } = require('./helpers')
 
 /**
+ * Checks if file or directory exists
+ *
+ * @param {String} path - Path towards directory or file
+ * @returns {Boolean}
+ *
+ * @example
+ * pathExists('./src')
+ * pathExists('./src/version.json')
+ */
+const pathExists = (path = null) => {
+  if (!path) { throw new Error('Path is not set') }
+
+  return fs.existsSync(path)
+}
+
+/**
  * Reads directory if it exists and is accessible
  *
  * @param {String} dir - Path to check for access
@@ -15,20 +31,18 @@ const { log, isFalsy } = require('./helpers')
 const readDir = (dir) => {
   return new Promise((resolve, reject) => {
     // Check if path is valid
-    fs.access(dir, fs.R_OK, (error) => {
-      if (error) {
-        reject(new Error('Requested directory doesn\'t exist.'))
-      } else {
-        // Read requested directory
-        fs.readdir(dir, (fileError, files) => {
-          if (fileError) {
-            reject(new Error(`Unable to read directory: ${fileError}`))
-          } else {
-            resolve(files)
-          }
-        })
-      }
-    })
+    if (pathExists(path.normalize(dir))) {
+      // Read requested directory
+      fs.readdir(dir, (fileError, files) => {
+        if (fileError) {
+          reject(new Error(`Unable to read directory: ${fileError}`))
+        } else {
+          resolve(files)
+        }
+      })
+    } else {
+      reject(new Error(`Unable to read directory: ${dir}`))
+    }
   })
 }
 
