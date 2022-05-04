@@ -18,6 +18,12 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 
 ### Deprecated
 
+## [v1.1.6] (released: 2022-05-04)
+# Fixed
+- chore: Update NPM and bump version to 1.1.6 ([#8])
+
+[#8]: https://github.com/openlawlibrary/oll-visual-tester/pull/8
+
 ## [v1.1.5] (released: 2021-12-22)
 # Fixed
 - Macos bugfix ([#5])
