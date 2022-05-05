@@ -98,7 +98,7 @@ const configurationArray = [
   },
 ]
 
-generateImages(configurationArray)
+generateImages({imagesConfig: configurationArray})
   .then(result => { console.log(result) })
   .catch(error => { console.error(error) })
 ```
