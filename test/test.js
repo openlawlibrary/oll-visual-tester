@@ -3,7 +3,7 @@ const { generateImages, compareImages } = require('../src/index')
 
 const config = [
   {
-    goto: 'http://duckduckgo.com',
+    goto: 'http://openlawlib.org/',
     engine: 'firefox', // 'firefox', 'chromium', 'webkit'
     width: 800,
     height: 600,
@@ -21,7 +21,7 @@ const config = [
     debug: true,
   },
   {
-    goto: 'http://duckduckgo.com',
+    goto: 'http://openlawlib.org/',
     engine: 'firefox', // 'firefox', 'chromium', 'webkit'
     width: 800,
     height: 600,
@@ -39,7 +39,7 @@ const config = [
     debug: true,
   },
   {
-    goto: 'http://duckduckgo.com',
+    goto: 'http://openlawlib.org/',
     engine: 'firefox', // 'firefox', 'chromium', 'webkit'
     width: 800,
     height: 600,
@@ -57,7 +57,7 @@ const config = [
     debug: true,
   },
   {
-    goto: 'http://duckduckgo.com',
+    goto: 'http://openlawlib.org/',
     engine: 'webkit', // 'firefox', 'chromium', 'webkit'
     width: 800,
     height: 600,
@@ -80,6 +80,12 @@ const config = [
 msg('Starting to generate images')
 msg('One diff should pass, one should fail')
 
+const testFailed = error => {
+  msg('Test failed: ' + error)
+
+  process.exit(1)
+}
+
 generateImages({
   imagesConfig: config,
 })
@@ -101,8 +107,10 @@ generateImages({
 
         if (result.passed.length === 1 && result.failed.length === 1) {
           msg('*** TEST PASSED ***')
+        } else {
+          testFailed('Results are not as expected')
         }
       })
-      .catch((error) => { console.error(error) })
+      .catch((error) => { testFailed(error) })
   })
-  .catch((error) => { console.error(error) })
+  .catch((error) => { testFailed(error) })
