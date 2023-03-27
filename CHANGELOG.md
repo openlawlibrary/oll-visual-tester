@@ -18,7 +18,9 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 
 ### Deprecated
 
-
+## [v1.1.8] (released: 2023-03-27)
+# Fixed
+- chore: Update NPM and bump version ([#10])
 
 ## [v1.1.7] (released: 2022-10-05)
 # Fixed
