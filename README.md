@@ -12,6 +12,14 @@ Afterwards you can import it like this:
 const { screenshot, generateImages, compareImages } = require('oll-visual-tester')
 ```
 
+### Adding Playwright dependencies
+It is recommended to install Playwright with all dependencies to avoid any
+issues with running the tests.
+
+```bash
+npx playwright install --with-deps
+```
+
 ## Features
 
 ### Screenshot tool
