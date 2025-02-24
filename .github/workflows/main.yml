@@ -32,7 +32,6 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          registry-url: https://registry.npmjs.org/
           cache-dependency-path: oll-visual-tester/npm-shrinkwrap.json
 
       # Install NPM modules
@@ -41,6 +40,7 @@ jobs:
         shell: bash
         run: |
           cd oll-visual-tester
+          sudo apt-get install -y libvips
           npm ci --ignore-scripts --loglevel error
           npx playwright install --with-deps
 
