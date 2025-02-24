@@ -1,6 +1,6 @@
 {
   "name": "oll-visual-tester",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Create page screenshots and then easily compare them.",
   "repository": {
     "type": "git",
@@ -10,16 +10,16 @@
     "chalk": "^4.1.2",
     "fancy-log": "^2.0.0",
     "fs-extra": "^10.1.0",
-    "img-diff-js": "^0.5.2",
-    "join-images": "^0.2.9",
-    "playwright": "^1.32.1",
-    "tslib": "^2.5.0"
+    "img-diff-js": "^0.5.4",
+    "join-images": "^1.1.5",
+    "playwright": "^1.50.1",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0"
   },

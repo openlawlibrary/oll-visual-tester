@@ -18,6 +18,9 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 
 ### Deprecated
 
+## [v1.1.9] (released: 2025-02-24)
+- chore: Fix outdated NPM and add github workflow
+
 ## [v1.1.8] (released: 2023-03-27)
 # Fixed
 - chore: Update NPM and bump version ([#10])
@@ -86,7 +89,9 @@ and this project adheres to a _modified_ form of _[Semantic Versioning][semver]_
 - Initial version.
 
 
-[Unreleased]: https://github.com/openlawlibrary/platform/compare/v1.1.7...HEAD
+[Unreleased]: https://github.com/openlawlibrary/platform/compare/v1.1.9...HEAD
+[v1.1.9]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.8...v1.1.9
+[v1.1.8]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.7...v1.1.8
 [v1.1.7]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.6...v1.1.7
 [v1.1.6]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.5...v1.1.6
 [v1.1.5]: https://github.com/openlawlibrary/oll-visual-tester/compare/v1.1.4...v1.1.5
